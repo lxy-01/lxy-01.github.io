@@ -1,0 +1,676 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Neo4j图数据库学习 | 欢迎来到小刘的博客</title><meta name="author" content="小刘"><meta name="copyright" content="小刘"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Neo4j学习简介图数据库（Graph Database）是一种以图结构为基础进行数据存储与查询的数据库。与传统的关系型数据库通过表格和主外键进行建模不同，图数据库使用节点（Nodes）和关系（Relationships）直接表示实体及其之间的连接，更加自然地映射现实世界中的关联结构，特别适用于处理复杂的连接型数据。 安装安装方式概览Neo4j Desktop 本地可视化工具，适合开发者使用，界面">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Neo4j图数据库学习">
+<meta property="og:url" content="http://example.com/2026/05/18/Neo4j%E5%9B%BE%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="欢迎来到小刘的博客">
+<meta property="og:description" content="Neo4j学习简介图数据库（Graph Database）是一种以图结构为基础进行数据存储与查询的数据库。与传统的关系型数据库通过表格和主外键进行建模不同，图数据库使用节点（Nodes）和关系（Relationships）直接表示实体及其之间的连接，更加自然地映射现实世界中的关联结构，特别适用于处理复杂的连接型数据。 安装安装方式概览Neo4j Desktop 本地可视化工具，适合开发者使用，界面">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/avatar.jpg">
+<meta property="article:published_time" content="2026-05-18T06:04:48.000Z">
+<meta property="article:modified_time" content="2026-05-18T06:43:22.209Z">
+<meta property="article:author" content="小刘">
+<meta property="article:tag" content="AI">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/avatar.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Neo4j图数据库学习",
+  "url": "http://example.com/2026/05/18/Neo4j%E5%9B%BE%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0/",
+  "image": "http://example.com/img/avatar.jpg",
+  "datePublished": "2026-05-18T06:04:48.000Z",
+  "dateModified": "2026-05-18T06:43:22.209Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "小刘",
+      "url": "http://example.com"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/avatar.jpg"><link rel="canonical" href="http://example.com/2026/05/18/Neo4j%E5%9B%BE%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Neo4j图数据库学习',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 8.1.2"></head><body><div class="bg-animation" id="web_bg" style="background-image: url(/img/banner.jpeg);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/loading.gif" data-original="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">6</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 笔记</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/banner.jpeg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">欢迎来到小刘的博客</span></a><a class="nav-page-title" href="/"><span class="site-name">Neo4j图数据库学习</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-graduation-cap"></i><span> 笔记</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Neo4j图数据库学习</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-05-18T06:04:48.000Z" title="发表于 2026-05-18 14:04:48">2026-05-18</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-05-18T06:43:22.209Z" title="更新于 2026-05-18 14:43:22">2026-05-18</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/python/">python</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">4.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>16分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Neo4j学习"><a href="#Neo4j学习" class="headerlink" title="Neo4j学习"></a>Neo4j学习</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>图数据库（Graph Database）是一种以图结构为基础进行数据存储与查询的数据库。与传统的关系型数据库通过表格和主外键进行建模不同，图数据库使用节点（Nodes）和关系（Relationships）直接表示实体及其之间的连接，更加自然地映射现实世界中的关联结构，特别适用于处理复杂的连接型数据。</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h3 id="安装方式概览"><a href="#安装方式概览" class="headerlink" title="安装方式概览"></a>安装方式概览</h3><p><strong>Neo4j Desktop</strong></p>
+<p>本地可视化工具，适合开发者使用，界面友好，支持多项目管理，适用于学习、测试和原型开发。</p>
+<p><strong>OS Deployment</strong></p>
+<p>通过系统安装包部署，适用于生产环境，具备更高的灵活性和控制力，适合有一定技术基础的用户。</p>
+<p><strong>Neo4j Aura</strong></p>
+<p>官方提供的全托管云数据库服务，免安装、免运维，开箱即用，适合快速上线项目或对云优先策略有需求的用户。</p>
+<h3 id="安装JDK"><a href="#安装JDK" class="headerlink" title="安装JDK"></a>安装JDK</h3><p>Neo4j的运行需要Java环境，根据<a target="_blank" rel="noopener" href="https://neo4j.com/docs/operations-manual/5/installation/requirements/#deployment-requirements-java">官方文档</a>要求，5.26（LTS）版本的Neo4j需要安装JDK17或者JDK21。</p>
+<h3 id="安装Neo4j"><a href="#安装Neo4j" class="headerlink" title="安装Neo4j"></a>安装Neo4j</h3><h4 id="获取安装包"><a href="#获取安装包" class="headerlink" title="获取安装包"></a>获取安装包</h4><p>安装包可从<a target="_blank" rel="noopener" href="https://neo4j.com/deployment-center/">Neo4j官网</a>下载</p>
+<p><img src="/img/loading.gif" data-original="D:\个人资料\hexo\source\assets\Neo4j图数据库学习\安装.png" alt="安装"></p>
+<h4 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h4><p>安装包获取后，须手动解压到安装目录，并添加环境变量 <code>NEO4J_HOME</code>，路径指向 bin 的上一级路径，然后再在 PATH环境变量下添加<code>%NEO4J_HOME%\bin</code>。操作完成后可在终端执行<code>neo4j --version</code> 命令，如果输出版本信息，则说明操作成功。</p>
+<h4 id="安装Neo4j-service"><a href="#安装Neo4j-service" class="headerlink" title="安装Neo4j service"></a>安装Neo4j service</h4><p>执行如下命令，可将eno4j作为系统服务进行安装。</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">neo4j windows<span class="operator">-</span>service install</span><br></pre></td></tr></table></figure>
+
+<h4 id="启动Neo4j"><a href="#启动Neo4j" class="headerlink" title="启动Neo4j"></a>启动Neo4j</h4><p>初次启动，需执行如下命令，后续会开机自启。</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">neo4j <span class="keyword">start</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="访问web页面"><a href="#访问web页面" class="headerlink" title="访问web页面"></a>访问web页面</h4><p>启动成功后，neo4j会提供一个web页面作为客户端，访问地址为<a target="_blank" rel="noopener" href="http://localhost:7474/browser/preview/">http://localhost:7474/browser/preview/</a> ，初始用户名和密码均为neo4j。初次登录需要修改密码。</p>
+<p><img src="/img/loading.gif" data-original="D:\个人资料\hexo\source\assets\Neo4j图数据库学习\注册.png" alt="注册"></p>
+<h2 id="Cypher语言基础"><a href="#Cypher语言基础" class="headerlink" title="Cypher语言基础"></a>Cypher语言基础</h2><p>Cypher 基于 Neo4j 的图数据模型进行设计，该模型由以下三种基本元素组成：</p>
+<p><strong>节点（Node）</strong></p>
+<p>节点代表图中的实体对象，如“人”、“公司”、“电影”等。每个节点：</p>
+<ul>
+<li>拥有一个或多个标签（Labels）（可选）</li>
+<li>包含若干属性（Properties）（可选）</li>
+</ul>
+<p>Cypher中用 <strong>( )</strong> 声明一个节点，具体语法如下图所示：</p>
+<p><img src="/img/loading.gif" data-original="D:\个人资料\hexo\source\assets\Neo4j图数据库学习\image-20260121143534084.png" alt="image-20260121143534084"></p>
+<p><strong>关系（Relationship)</strong></p>
+<p>关系用于连接两个节点，表示它们之间的有向连接，如“人导演电影”，“人参演电影”，每个关系：</p>
+<ul>
+<li>拥有一个类型（Type）（必须）</li>
+<li>包含若干个属性（Propertie）（可选）</li>
+</ul>
+<p>Cypher中用 -[ ]-&gt; 声明一个关系，具体语法如下图所示：</p>
+<p><img src="/img/loading.gif" data-original="D:\个人资料\hexo\source\assets\Neo4j图数据库学习\image-20260121143855847.png" alt="image-20260121143855847"></p>
+<p><strong>路径（Path）</strong></p>
+<p>路径是由一系列<strong>节点和关系连接构成的结构</strong>，代表图中实体间的关联链条，是图查询的核心。</p>
+<h3 id="写入节点"><a href="#写入节点" class="headerlink" title="写入节点"></a>写入节点</h3><p>使用 CREATE 语句创建图中的节点。每个节点可以携带一个或多个标签（如 Person、Actor）和一组属性（如 name、gender），这些标签和属性用来标识节点的类型和具体信息。</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> (n1:Person:Actor:Director &#123;name: <span class="string">&#x27;王宝强&#x27;</span>, gender: <span class="string">&#x27;男&#x27;</span>&#125;)</span><br><span class="line"><span class="keyword">CREATE</span> (n2:Movie &#123;title: <span class="string">&#x27;唐探1900&#x27;</span>, released: <span class="string">&#x27;2025-01-29&#x27;</span>&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="查询节点"><a href="#查询节点" class="headerlink" title="查询节点"></a>查询节点</h3><p>使用 MATCH 语句可以查找图中的节点。但实际上，MATCH 的作用不仅仅是“查询节点”，它的本质是匹配图中符合特定结构（Pattern）的数据。</p>
+<p><strong>查询所有节点</strong></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">MATCH</span> (n)</span><br><span class="line"><span class="keyword">RETURN</span> n</span><br></pre></td></tr></table></figure>
+
+<p><strong>按标签筛选特定的节点</strong></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">MATCH</span>(n:Person)</span><br><span class="line"><span class="keyword">RETURN</span> n</span><br></pre></td></tr></table></figure>
+
+<p><strong>按标签和属性筛选特定的节点</strong></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">MATCH</span> (n:Person &#123;name: <span class="string">&#x27;王宝强&#x27;</span>&#125;)</span><br><span class="line"><span class="keyword">RETURN</span> n;</span><br></pre></td></tr></table></figure>
+
+<h3 id="写入关系"><a href="#写入关系" class="headerlink" title="写入关系"></a>写入关系</h3><p>通过 CREATE 语句也可以在两个节点之间创建关系。关系必须指定类型，也可以带上属性（例如角色名），用来表示两个实体之间的具体连接方式。</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">MATCH</span> (n1:Person &#123;name: <span class="string">&#x27;王宝强&#x27;</span>&#125;), (n2:Movie &#123;title: <span class="string">&#x27;唐探1900&#x27;</span>&#125;)</span><br><span class="line"><span class="keyword">CREATE</span> (n1)<span class="operator">-</span>[:ACTED_IN &#123;role: <span class="string">&#x27;阿鬼&#x27;</span>&#125;]<span class="operator">-</span><span class="operator">&gt;</span>(n2)</span><br></pre></td></tr></table></figure>
+
+<h3 id="查询关系"><a href="#查询关系" class="headerlink" title="查询关系"></a>查询关系</h3><p>关系模式通常包括起始节点、关系方向和类型、以及目标节点。</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">MATCH</span> (n1:Person &#123;name: <span class="string">&#x27;王宝强&#x27;</span>&#125;)<span class="operator">-</span>[r]<span class="operator">-</span><span class="operator">&gt;</span>(n2:Movie &#123;title: <span class="string">&#x27;唐探1900&#x27;</span>&#125;)</span><br><span class="line"><span class="keyword">RETURN</span> r</span><br></pre></td></tr></table></figure>
+
+<h3 id="写入路径"><a href="#写入路径" class="headerlink" title="写入路径"></a>写入路径</h3><p>路径结构由节点 ( ) 和关系 -[ ]-&gt; 组合而成</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span></span><br><span class="line">  (n1:Person:Actor:Singer &#123;name: <span class="string">&#x27;刘德华&#x27;</span>, gender: <span class="string">&#x27;男&#x27;</span>&#125;)<span class="operator">-</span></span><br><span class="line">    [:ACTED_IN &#123;roles: [<span class="string">&#x27;刘建明&#x27;</span>]&#125;]<span class="operator">-</span><span class="operator">&gt;</span></span><br><span class="line">  (n2:Movie &#123;title: <span class="string">&#x27;无间道&#x27;</span>, released: <span class="string">&#x27;2002-12-12&#x27;</span>&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="修改数据"><a href="#修改数据" class="headerlink" title="修改数据"></a>修改数据</h3><p>可以使用 SET 和 REMOVE 对图中的节点或关系进行修改。SET 用于添加或更新属性，也可以为节点添加新的标签；REMOVE 用于删除属性或移除已有的标签。</p>
+<p><strong>为节点添加属性和标签</strong></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">MATCH</span> (n1:Person &#123;name: <span class="string">&#x27;王宝强&#x27;</span>&#125;)</span><br><span class="line"><span class="keyword">SET</span> n1.birth <span class="operator">=</span> <span class="string">&#x27;1984-05-29&#x27;</span>, n1: Singer</span><br></pre></td></tr></table></figure>
+
+<p><strong>为关系删除和添加属性</strong></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">MATCH</span> (n1:Person &#123;name: <span class="string">&#x27;王宝强&#x27;</span>&#125;)<span class="operator">-</span>[r:ACTED_IN]<span class="operator">-</span><span class="operator">&gt;</span>(n2:Movie &#123;title: <span class="string">&#x27;唐探1900&#x27;</span>&#125;)</span><br><span class="line">REMOVE r.role</span><br><span class="line"><span class="keyword">SET</span> r.roles <span class="operator">=</span> [<span class="string">&#x27;阿鬼&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<h3 id="删除数据"><a href="#删除数据" class="headerlink" title="删除数据"></a>删除数据</h3><p>使用 DELETE 可以删除节点和关系。在执行删除操作前，通常需要先通过 MATCH 找到对应的节点和关系。如果一个节点还有未删除的关系，必须先删除关系，才能成功删除该节点</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">MATCH</span> (n1:Person &#123;name: <span class="string">&#x27;王宝强&#x27;</span>&#125;)<span class="operator">-</span>[r:ACTED_IN]<span class="operator">-</span><span class="operator">&gt;</span>(n2:Movie &#123;title: <span class="string">&#x27;唐探1900&#x27;</span>&#125;)</span><br><span class="line"><span class="keyword">DELETE</span> n1, r, n2</span><br></pre></td></tr></table></figure>
+
+<h3 id="合并操作"><a href="#合并操作" class="headerlink" title="合并操作"></a>合并操作</h3><p>Merge（合并）操作相当于Match和Create操作的一个组合，其会先匹配目标节点或关系是否存在，如果不存在，则创建目标节点，如果存在则不执行任何操作。</p>
+<p><strong>Merge节点</strong></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="operator">/</span><span class="operator">/</span> <span class="keyword">Merge</span>电影节点</span><br><span class="line"><span class="keyword">MERGE</span> (n2:Movie &#123;title: <span class="string">&#x27;唐探1900&#x27;</span>, released: <span class="string">&#x27;2025-01-29&#x27;</span>&#125;);</span><br><span class="line"></span><br><span class="line"><span class="operator">/</span><span class="operator">/</span> <span class="keyword">Merge</span>演员节点</span><br><span class="line"><span class="keyword">MERGE</span> (n1:Person:Actor:Director &#123;name: <span class="string">&#x27;王宝强&#x27;</span>, gender: <span class="string">&#x27;男&#x27;</span>&#125;)</span><br><span class="line">  <span class="keyword">ON</span> <span class="keyword">CREATE</span> <span class="keyword">SET</span> n1.create_time <span class="operator">=</span> datetime() <span class="operator">/</span><span class="operator">/</span> 创建时设置创建时间（可选操作）</span><br><span class="line">  <span class="keyword">ON</span> <span class="keyword">MATCH</span> <span class="keyword">SET</span> n1.update_time <span class="operator">=</span> datetime() <span class="operator">/</span><span class="operator">/</span> 匹配时设置更新时间（可选操作）</span><br></pre></td></tr></table></figure>
+
+<p><strong>Merge关系</strong></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="operator">/</span><span class="operator">/</span> <span class="keyword">Merge</span>关系</span><br><span class="line"><span class="keyword">MERGE</span> (n1:Person &#123;name: <span class="string">&#x27;王宝强&#x27;</span>&#125;)<span class="operator">-</span>[r:ACTED_IN &#123;roles: [<span class="string">&#x27;阿鬼&#x27;</span>]&#125;]<span class="operator">-</span><span class="operator">&gt;</span>(n2:Movie &#123;title: <span class="string">&#x27;唐探1900&#x27;</span>&#125;)</span><br></pre></td></tr></table></figure>
+
+<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><p>Cypher 中的值可以作为节点或关系的属性，也可用于查询条件、函数参数或返回结果。</p>
+<h3 id="基本数据类型"><a href="#基本数据类型" class="headerlink" title="基本数据类型"></a>基本数据类型</h3><table>
+<thead>
+<tr>
+<th><strong>类型</strong></th>
+<th><strong>示例</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>String</strong></td>
+<td>‘Neo4j’, ‘王宝强’</td>
+<td>字符串，必须用单&#x2F;双引号括起来</td>
+</tr>
+<tr>
+<td><strong>Integer</strong></td>
+<td>42, 2025</td>
+<td>整数类型</td>
+</tr>
+<tr>
+<td><strong>Float</strong></td>
+<td>3.14, 99.99</td>
+<td>浮点类型，带小数点</td>
+</tr>
+<tr>
+<td><strong>Boolean</strong></td>
+<td>true, false</td>
+<td>布尔值</td>
+</tr>
+</tbody></table>
+<h3 id="复合数据类型"><a href="#复合数据类型" class="headerlink" title="复合数据类型"></a>复合数据类型</h3><table>
+<thead>
+<tr>
+<th><strong>类型</strong></th>
+<th><strong>示例</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>List</strong></td>
+<td>[‘王宝强’, ‘刘昊然’]</td>
+<td>有序列表，可存储多个值</td>
+</tr>
+<tr>
+<td><strong>Map</strong></td>
+<td>{year: 2025, month: 6, day: 1}</td>
+<td>键值对形式的结构，常用于函数参数传递</td>
+</tr>
+</tbody></table>
+<h2 id="Cypher函数"><a href="#Cypher函数" class="headerlink" title="Cypher函数"></a>Cypher函数</h2><h3 id="字符串函数"><a href="#字符串函数" class="headerlink" title="字符串函数"></a>字符串函数</h3><p>用于对字符串进行格式化、截取、替换等常见操作，便于对文本属性进行处理和筛选。</p>
+<table>
+<thead>
+<tr>
+<th><strong>函数</strong></th>
+<th><strong>示例</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>toUpper()</strong></td>
+<td>RETURN toUpper(‘neo4j’) → ‘NEO4J’</td>
+<td>转为大写</td>
+</tr>
+<tr>
+<td><strong>toLower()</strong></td>
+<td>RETURN toLower(‘NEO4J’) → ‘neo4j’</td>
+<td>转为小写</td>
+</tr>
+<tr>
+<td><strong>substring()</strong></td>
+<td>RETURN substring(‘neo4j’, 0, 3) → ‘neo’</td>
+<td>截取子串</td>
+</tr>
+<tr>
+<td><strong>replace()</strong></td>
+<td>RETURN replace(‘neo4j’, ‘o’, ‘O’) → ‘neO4j’</td>
+<td>替换字符串</td>
+</tr>
+<tr>
+<td><strong>trim()</strong></td>
+<td>RETURN trim(‘ hello ‘) → ‘hello’</td>
+<td>去除前后空格</td>
+</tr>
+<tr>
+<td><strong>left() &#x2F; right()</strong></td>
+<td>RETURN left(‘hello’, 2) → ‘he’</td>
+<td>左&#x2F;右截取</td>
+</tr>
+</tbody></table>
+<h3 id="数学函数"><a href="#数学函数" class="headerlink" title="数学函数"></a>数学函数</h3><p>提供基础的数学计算功能，如绝对值、四舍五入、取整、开方和生成随机数等。</p>
+<table>
+<thead>
+<tr>
+<th><strong>函数</strong></th>
+<th><strong>示例</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>abs()</strong></td>
+<td>RETURN abs(-5) → 5</td>
+<td>绝对值</td>
+</tr>
+<tr>
+<td><strong>round()</strong></td>
+<td>RETURN round(3.6) → 4.0</td>
+<td>四舍五入</td>
+</tr>
+<tr>
+<td><strong>ceil()</strong></td>
+<td>RETURN ceil(3.2) → 4.0</td>
+<td>向上取整</td>
+</tr>
+<tr>
+<td><strong>floor()</strong></td>
+<td>RETURN floor(3.8) → 3.0</td>
+<td>向下取整</td>
+</tr>
+<tr>
+<td><strong>rand()</strong></td>
+<td>RETURN rand()</td>
+<td>返回 0~1 间的随机数</td>
+</tr>
+<tr>
+<td><strong>sqrt()</strong></td>
+<td>RETURN sqrt(9) → 3.0</td>
+<td>平方根</td>
+</tr>
+</tbody></table>
+<h3 id="集合函数"><a href="#集合函数" class="headerlink" title="集合函数"></a>集合函数</h3><p>用于处理列表数据结构，支持统计长度、获取首尾元素以及判断元素是否存在等操作。</p>
+<table>
+<thead>
+<tr>
+<th><strong>函数</strong></th>
+<th><strong>示例</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>size()</strong></td>
+<td>RETURN size([‘a’, ‘b’, ‘c’]) → 3</td>
+<td>集合长度</td>
+</tr>
+<tr>
+<td><strong>head()</strong></td>
+<td>RETURN head([‘a’, ‘b’, ‘c’]) → ‘a’</td>
+<td>返回第一个元素</td>
+</tr>
+<tr>
+<td><strong>last()</strong></td>
+<td>RETURN last([‘a’, ‘b’, ‘c’]) → ‘c’</td>
+<td>返回最后一个元素</td>
+</tr>
+<tr>
+<td><strong>in</strong></td>
+<td>RETURN ‘刘昊然’ IN [‘王宝强’,’刘昊然’] → true</td>
+<td>判断元素是否存在于集合中</td>
+</tr>
+</tbody></table>
+<h3 id="日期时间函数"><a href="#日期时间函数" class="headerlink" title="日期时间函数"></a>日期时间函数</h3><p>用于获取当前的日期、时间或完整的时间戳，常用于记录数据创建和修改的时间点。</p>
+<table>
+<thead>
+<tr>
+<th><strong>函数</strong></th>
+<th><strong>示例</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>date()</strong></td>
+<td>RETURN date()</td>
+<td>返回当前日期</td>
+</tr>
+<tr>
+<td><strong>time()</strong></td>
+<td>RETURN time()</td>
+<td>返回当前时间</td>
+</tr>
+<tr>
+<td><strong>datetime()</strong></td>
+<td>RETURN datetime()</td>
+<td>返回当前日期时间</td>
+</tr>
+</tbody></table>
+<h2 id="Cypher高级查询"><a href="#Cypher高级查询" class="headerlink" title="Cypher高级查询"></a>Cypher高级查询</h2><h3 id="过滤"><a href="#过滤" class="headerlink" title="过滤"></a>过滤</h3><h4 id="基本比较运算符"><a href="#基本比较运算符" class="headerlink" title="基本比较运算符"></a>基本比较运算符</h4><p>WHERE 子句支持多种比较运算符，如 &#x3D;, &lt;&gt;, &lt;, &gt;, &lt;&#x3D;, &gt;&#x3D;。</p>
+<p>示例：查询出生在 1970 年之后的演员</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">MATCH</span> (p:Person)</span><br><span class="line"><span class="keyword">WHERE</span> p.birth <span class="operator">&gt;</span> <span class="string">&#x27;1970-01-01&#x27;</span></span><br><span class="line"><span class="keyword">RETURN</span> p.name, p.birth</span><br></pre></td></tr></table></figure>
+
+<h4 id="多条件组合"><a href="#多条件组合" class="headerlink" title="多条件组合"></a>多条件组合</h4><p>可以通过 AND 和 OR 组合多个判断条件，构建复杂的过滤逻辑。</p>
+<p>示例：查询评分高于 8 且年份早于 2000 年的电影</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">MATCH</span> (m:Movie)</span><br><span class="line"><span class="keyword">WHERE</span> m.rating <span class="operator">&gt;</span> <span class="number">8.0</span> <span class="keyword">AND</span> m.year <span class="operator">&lt;</span> <span class="number">2000</span></span><br><span class="line"><span class="keyword">RETURN</span> m.title, m.year, m.rating</span><br></pre></td></tr></table></figure>
+
+<h4 id="集合包含"><a href="#集合包含" class="headerlink" title="集合包含"></a>集合包含</h4><p>IN 操作用于判断某个值是否包含在一个列表中</p>
+<p>示例：查找类型包含“历史”的电影</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">MATCH</span> (m:Movie)</span><br><span class="line"><span class="keyword">WHERE</span> <span class="string">&#x27;历史&#x27;</span> <span class="keyword">IN</span> m.genre</span><br><span class="line"><span class="keyword">RETURN</span> m.title, m.genre</span><br></pre></td></tr></table></figure>
+
+<h4 id="字符串匹配"><a href="#字符串匹配" class="headerlink" title="字符串匹配"></a>字符串匹配</h4><p>可使用CONTAINS、STARTS WITH、END_WITH操作进行字符串匹配，适用于文本类型的属性，支持模糊或前缀匹配。</p>
+<p>示例：查询名字中包含“张”的人物</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">MATCH</span> (p:Person)</span><br><span class="line"><span class="keyword">WHERE</span> p.name <span class="keyword">CONTAINS</span> <span class="string">&#x27;张&#x27;</span></span><br><span class="line"><span class="keyword">RETURN</span> p.name</span><br></pre></td></tr></table></figure>
+
+<h4 id="空值判断"><a href="#空值判断" class="headerlink" title="空值判断"></a>空值判断</h4><p>可使用IS NULL &#x2F; IS NOT NULL 进行空值判断，用于判断属性是否存在或为空，特别适用于数据完整性筛选。</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">MATCH</span> (p:Person)</span><br><span class="line"><span class="keyword">WHERE</span> p.birth <span class="keyword">IS</span> <span class="keyword">NULL</span></span><br><span class="line"><span class="keyword">RETURN</span> p.name</span><br></pre></td></tr></table></figure>
+
+<h3 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h3><p>ORDER BY字句默认使用<strong>升序</strong>（ASC），也可以显式指定为 DESC（降序）。</p>
+<p>示例：按电影评分从高到低排序</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">MATCH</span> (m:Movie)</span><br><span class="line"><span class="keyword">RETURN</span> m.title, m.rating</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> m.rating <span class="keyword">DESC</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="分页"><a href="#分页" class="headerlink" title="分页"></a>分页</h3><h4 id="使用-LIMIT-限制返回数量"><a href="#使用-LIMIT-限制返回数量" class="headerlink" title="使用 LIMIT 限制返回数量"></a>使用 LIMIT 限制返回数量</h4><p>LIMIT n 表示最多返回前 n 条结果，用于快速查看或测试数据。</p>
+<p>示例：返回评分最高的前 3 部电影</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">MATCH</span> (m:Movie)</span><br><span class="line"><span class="keyword">RETURN</span> m.title, m.rating</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> m.rating <span class="keyword">DESC</span></span><br><span class="line">LIMIT <span class="number">3</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="使用-SKIP-跳过指定数量"><a href="#使用-SKIP-跳过指定数量" class="headerlink" title="使用 SKIP 跳过指定数量"></a>使用 SKIP 跳过指定数量</h4><p>SKIP n 表示跳过前 n 条记录，通常与 LIMIT 搭配实现分页功能。</p>
+<p>示例：跳过前 5 条，返回第 6~10 条电影</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">MATCH</span> (m:Movie)</span><br><span class="line"><span class="keyword">RETURN</span> m.title, m.year</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> m.year <span class="keyword">DESC</span></span><br><span class="line"><span class="keyword">SKIP</span> <span class="number">5</span></span><br><span class="line">LIMIT <span class="number">5</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="聚合"><a href="#聚合" class="headerlink" title="聚合"></a>聚合</h3><p>当 RETURN 中同时包含聚合函数和非聚合字段时，Cypher 会<strong>自动按照非聚合字段进行分组</strong>，无需显式使用 SQL 中的 GROUP BY 关键字</p>
+<h4 id="数值类聚合"><a href="#数值类聚合" class="headerlink" title="数值类聚合"></a>数值类聚合</h4><p>这类函数用于对数值属性进行处理，支持统计数量count()、平均值avg()、总和sum()、最大值max()和最小值min()等操作。</p>
+<p>示例：统计演员总数（去重）</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">MATCH</span> (p:Person)<span class="operator">-</span>[:ACTED_IN]<span class="operator">-</span><span class="operator">&gt;</span>()</span><br><span class="line"><span class="keyword">RETURN</span> <span class="built_in">count</span>(<span class="keyword">DISTINCT</span> p) <span class="keyword">AS</span> 演员人数</span><br></pre></td></tr></table></figure>
+
+<p>示例：每位演员参演电影数量</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">MATCH</span> (p:Person)<span class="operator">-</span>[:ACTED_IN]<span class="operator">-</span><span class="operator">&gt;</span>(m:Movie)</span><br><span class="line"><span class="keyword">RETURN</span> p.name, <span class="built_in">count</span>(m) <span class="keyword">AS</span> 参演电影数</span><br></pre></td></tr></table></figure>
+
+<h3 id="列表类聚合"><a href="#列表类聚合" class="headerlink" title="列表类聚合"></a>列表类聚合</h3><p>collect() 函数可以将多个结果合并为一个列表，常用于归集某一实体关联的多个对象或属性值。</p>
+<p>示例：每位导演的作品名称列表</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">MATCH</span> (p:Person)<span class="operator">-</span>[:DIRECTED]<span class="operator">-</span><span class="operator">&gt;</span>(m:Movie)</span><br><span class="line"><span class="keyword">RETURN</span> p.name, <span class="keyword">collect</span>(m.title) <span class="keyword">AS</span> 导演作品</span><br></pre></td></tr></table></figure>
+
+<h3 id="联合查询"><a href="#联合查询" class="headerlink" title="联合查询"></a>联合查询</h3><p>UNION：合并结果并自动去重</p>
+<p>UNION ALL：合并结果但保留重复项</p>
+<p>使用 UNION和UNION ALL 时，各个查询的 RETURN 字段数量和类型必须保持一致。</p>
+<p>示例：查询“张艺谋”导演和参演的电影</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">MATCH</span> (p:Person &#123;name:<span class="string">&#x27;张艺谋&#x27;</span>&#125;)<span class="operator">-</span>[:DIRECTED]<span class="operator">-</span><span class="operator">&gt;</span>(m:Movie)</span><br><span class="line"><span class="keyword">RETURN</span> m.title <span class="keyword">AS</span> title, <span class="string">&#x27;导演&#x27;</span> <span class="keyword">AS</span> role</span><br><span class="line"><span class="keyword">UNION</span></span><br><span class="line"><span class="keyword">MATCH</span> (p:Person &#123;name:<span class="string">&#x27;张艺谋&#x27;</span>&#125;)<span class="operator">-</span>[:ACTED_IN]<span class="operator">-</span><span class="operator">&gt;</span>(m:Movie)</span><br><span class="line"><span class="keyword">RETURN</span> m.title <span class="keyword">AS</span> title, <span class="string">&#x27;演员&#x27;</span> <span class="keyword">AS</span> role</span><br></pre></td></tr></table></figure>
+
+<h3 id="子查询"><a href="#子查询" class="headerlink" title="子查询"></a>子查询</h3><p>Cypher 中的子查询使用 CALL (变量) {} 定义，用于执行独立的匹配、过滤或聚合操作。子查询对每一行输入数据执行一次，其返回的变量可在主查询中继续使用。</p>
+<p>示例：每位导演评分最高的电影</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">MATCH</span> (p:Person)<span class="operator">-</span>[:DIRECTED]<span class="operator">-</span><span class="operator">&gt;</span>()</span><br><span class="line"><span class="keyword">WITH</span> <span class="keyword">DISTINCT</span> p</span><br><span class="line"><span class="keyword">CALL</span> (p) &#123;</span><br><span class="line">  <span class="keyword">MATCH</span> (p)<span class="operator">-</span>[:DIRECTED]<span class="operator">-</span><span class="operator">&gt;</span>(m:Movie)</span><br><span class="line">  <span class="keyword">RETURN</span> m.title <span class="keyword">AS</span> title, m.rating <span class="keyword">AS</span> rating</span><br><span class="line">  <span class="keyword">ORDER</span> <span class="keyword">BY</span> rating <span class="keyword">DESC</span></span><br><span class="line">  LIMIT <span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">RETURN</span> p.name <span class="keyword">AS</span> 导演, title <span class="keyword">AS</span> 最高评分作品, rating <span class="keyword">AS</span> 评分</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>WITH 和 RETURN 的唯一区别在于：</p>
+<ol>
+<li>WITH 将结果传递给下一阶段查询</li>
+<li>RETURN 则用于输出最终结果。</li>
+</ol>
+</blockquote>
+<h3 id="高级模式匹配"><a href="#高级模式匹配" class="headerlink" title="高级模式匹配"></a>高级模式匹配</h3><h4 id="节点模式匹配"><a href="#节点模式匹配" class="headerlink" title="节点模式匹配"></a>节点模式匹配</h4><p>除了基本的单标签(:Person)或多标签(:Person:Actor)匹配，Cypher 还支持通过标签表达式组合多个标签，以表达更复杂的类型筛选条件。</p>
+<p>标签表达式支持以下逻辑运算符：</p>
+<ul>
+<li>&amp; 表示同时具备多个标签；</li>
+<li>| 表示任意一个标签匹配即可；</li>
+<li>! 表示排除某个标签；</li>
+<li>括号：用于控制逻辑优先级。</li>
+</ul>
+<p>示例：匹配Person或者Movie节点</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">MATCH</span> (n:(Person<span class="operator">|</span>Movie))</span><br><span class="line"><span class="keyword">RETURN</span> n</span><br></pre></td></tr></table></figure>
+
+<p>示例：匹配非Person节点</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">MATCH</span> (n:(<span class="operator">!</span>Person))</span><br><span class="line"><span class="keyword">RETURN</span> n;</span><br></pre></td></tr></table></figure>
+
+<h4 id="关系模式匹配"><a href="#关系模式匹配" class="headerlink" title="关系模式匹配"></a>关系模式匹配</h4><p><strong>标签（类型）表达式</strong></p>
+<p>示例：匹配任意一个类型的关系</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">MATCH</span> (:Person &#123;name: <span class="string">&#x27;张艺谋&#x27;</span>&#125;)<span class="operator">-</span>[:ACTED_IN<span class="operator">|</span>DIRECTED]<span class="operator">-</span><span class="operator">&gt;</span>(m:Movie)</span><br><span class="line"><span class="keyword">RETURN</span> <span class="keyword">DISTINCT</span> m.title</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>说明：由于一个关系只能有一个类型，因此对于关系而言，表达式中的&amp;操作无意义。</p>
+</blockquote>
+<h4 id="无方向关系"><a href="#无方向关系" class="headerlink" title="无方向关系"></a>无方向关系</h4><p>示例：查询与巩俐有过合作的人</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">MATCH</span> path <span class="operator">=</span> (p1:Person &#123;name: <span class="string">&#x27;巩俐&#x27;</span>&#125;)<span class="operator">-</span>[:ACTED_IN]<span class="operator">-</span>(m:Movie)<span class="operator">-</span>[:ACTED_IN]<span class="operator">-</span>(p2:Person)</span><br><span class="line"><span class="keyword">RETURN</span> path;</span><br></pre></td></tr></table></figure>
+
+<h4 id="路径模式匹配"><a href="#路径模式匹配" class="headerlink" title="路径模式匹配"></a>路径模式匹配</h4><p>在图数据库中，路径用于描述节点之间通过若干关系连接而成的结构。Cypher 提供了路径模式语法，支持指定路径长度范围，可用于匹配<strong>固定长度</strong>或<strong>变长</strong>路径。</p>
+<p>语法形式如下：</p>
+<blockquote>
+<p>()-[:TYPE]-&gt;{n}() &#x2F;&#x2F; 恰好 n 跳</p>
+<p>()-[:TYPE]-&gt;{m,n}() &#x2F;&#x2F; m 到 n 跳</p>
+<p>()-[:TYPE]-&gt;{m,}() &#x2F;&#x2F; 至少 m 跳</p>
+<p>()-[:TYPE]-&gt;{,n}() &#x2F;&#x2F; 最多 n 跳</p>
+</blockquote>
+<p>示例：查询张艺谋粉丝的粉丝</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">MATCH</span> path<span class="operator">=</span> (a:Person)<span class="operator">-</span>[:FOLLOWS]<span class="operator">-</span><span class="operator">&gt;</span>&#123;<span class="number">2</span>&#125;(b:Person&#123;name:<span class="string">&#x27;张艺谋&#x27;</span>&#125;)</span><br><span class="line"><span class="keyword">RETURN</span> path</span><br></pre></td></tr></table></figure>
+
+<h2 id="约束"><a href="#约束" class="headerlink" title="约束"></a>约束</h2><h3 id="属性唯一约束"><a href="#属性唯一约束" class="headerlink" title="属性唯一约束"></a>属性唯一约束</h3><p>Neo4j 中的唯一性约束用于确保某个或某组属性在具有特定标签的所有节点，或具有特定类型的所有关系中具有唯一值。该机制防止重复数据的写入，增强图数据的一致性。</p>
+<p>原则说明：</p>
+<ul>
+<li>唯一性约束可应用于节点或关系。</li>
+<li>如果是多个属性的组合约束，要求这些属性值的组合在图中是唯一的。</li>
+<li>当尝试插入违反唯一性的节点或关系时，将抛出错误，阻止写入。</li>
+</ul>
+<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><h4 id="节点属性"><a href="#节点属性" class="headerlink" title="节点属性"></a>节点属性</h4><p>要求所有具有特定标签的节点在指定属性上唯一。语法如下</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">CONSTRAINT</span> constraint_name</span><br><span class="line"><span class="keyword">FOR</span> (n:Label)</span><br><span class="line">REQUIRE n.property <span class="keyword">IS</span> <span class="keyword">UNIQUE</span>;</span><br></pre></td></tr></table></figure>
+
+<h4 id="关系单属性"><a href="#关系单属性" class="headerlink" title="关系单属性"></a>关系单属性</h4><p>要求所有特定类型的关系在指定属性上唯一。语法如下</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">CONSTRAINT</span> constraint_name</span><br><span class="line"><span class="keyword">FOR</span> ()<span class="operator">-</span>[r:REL_TYPE]<span class="operator">-</span>()</span><br><span class="line">REQUIRE r.property <span class="keyword">IS</span> <span class="keyword">UNIQUE</span>;</span><br></pre></td></tr></table></figure>
+
+<h4 id="节点复合属性"><a href="#节点复合属性" class="headerlink" title="节点复合属性"></a>节点复合属性</h4><p>要求所有具有特定标签的节点在指定多个属性上唯一。语法如下</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">CONSTRAINT</span> constraint_name</span><br><span class="line"><span class="keyword">FOR</span> (n:Label)</span><br><span class="line">REQUIRE (n.prop1, n.prop2) <span class="keyword">IS</span> <span class="keyword">UNIQUE</span>;</span><br></pre></td></tr></table></figure>
+
+<h4 id="关系复合属性"><a href="#关系复合属性" class="headerlink" title="关系复合属性"></a>关系复合属性</h4><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">CONSTRAINT</span> constraint_name</span><br><span class="line"><span class="keyword">FOR</span> ()<span class="operator">-</span>[r:REL_TYPE]<span class="operator">-</span>()</span><br><span class="line">REQUIRE (r.prop1, r.prop2) <span class="keyword">IS</span> <span class="keyword">UNIQUE</span>;</span><br></pre></td></tr></table></figure>
+
+<h4 id="查看约束"><a href="#查看约束" class="headerlink" title="查看约束"></a>查看约束</h4><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> CONSTRAINTS;</span><br></pre></td></tr></table></figure>
+
+<h4 id="删除约束"><a href="#删除约束" class="headerlink" title="删除约束"></a>删除约束</h4><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">DROP</span> <span class="keyword">CONSTRAINT</span> constraint_name;</span><br></pre></td></tr></table></figure>
+
+<h3 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h3><p>设计一个 User 节点，其 userId 属性必须唯一。防止系统中出现重复用户标识。</p>
+<p>1、定义唯一性约束</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">CONSTRAINT</span> unique_user_id</span><br><span class="line"><span class="keyword">FOR</span> (u:<span class="keyword">User</span>)</span><br><span class="line">REQUIRE u.userId <span class="keyword">IS</span> <span class="keyword">UNIQUE</span>;</span><br></pre></td></tr></table></figure>
+
+<p>2、正常插入用户节点</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> (u1:<span class="keyword">User</span> &#123;userId: <span class="string">&#x27;u001&#x27;</span>, name: <span class="string">&#x27;Alice&#x27;</span>, email: <span class="string">&#x27;alice@example.com&#x27;</span>&#125;);</span><br><span class="line"><span class="keyword">CREATE</span> (u2:<span class="keyword">User</span> &#123;userId: <span class="string">&#x27;u002&#x27;</span>, name: <span class="string">&#x27;Bob&#x27;</span>, email: <span class="string">&#x27;bob@example.com&#x27;</span>&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>3、尝试存入重复userId</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> (u3:<span class="keyword">User</span> &#123;userId: <span class="string">&#x27;u001&#x27;</span>, name: <span class="string">&#x27;Charlie&#x27;</span>, email: <span class="string">&#x27;charlie@example.com&#x27;</span>&#125;);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>执行后，Neo4j 返回错误：</p>
+<p>Neo.ClientError.Schema.ConstraintValidationFailed</p>
+<p>Node(124) already exists with label <code>User</code> and property <code>userId</code> &#x3D; ‘u001’</p>
+</blockquote>
+<p>4、查看约束</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> CONSTRAINTS;</span><br></pre></td></tr></table></figure>
+
+<p>返回结果如下</p>
+<table>
+<thead>
+<tr>
+<th><strong>id</strong></th>
+<th><strong>name</strong></th>
+<th><strong>type</strong></th>
+<th><strong>entityType</strong></th>
+<th><strong>labelsOrTypes</strong></th>
+<th><strong>properties</strong></th>
+<th><strong>ownedIndex</strong></th>
+<th><strong>propertyType</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>1</strong></td>
+<td>unique_user_id</td>
+<td>UNIQUENESS</td>
+<td>NODE</td>
+<td>[User]</td>
+<td>[userId]</td>
+<td>unique_user_id</td>
+<td>null</td>
+</tr>
+</tbody></table>
+<p>5、删除约束</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">DROP</span> <span class="keyword">CONSTRAINT</span> unique_user_id;</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用Python访问Neo4j"><a href="#使用Python访问Neo4j" class="headerlink" title="使用Python访问Neo4j"></a>使用Python访问Neo4j</h2><h3 id="安装Neo4j驱动"><a href="#安装Neo4j驱动" class="headerlink" title="安装Neo4j驱动"></a>安装Neo4j驱动</h3><p>Neo4j Python 驱动程序是通过 Python 应用程序与 Neo4j 实例交互的官方库。安装命令如下：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">pip install neo4j</span><br></pre></td></tr></table></figure>
+
+<h3 id="创建Driver对象"><a href="#创建Driver对象" class="headerlink" title="创建Driver对象"></a>创建Driver对象</h3><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> neo4j import GraphDatabase</span><br><span class="line"></span><br><span class="line">URI <span class="operator">=</span> &quot;neo4j://localhost&quot;</span><br><span class="line">AUTH <span class="operator">=</span> (&quot;neo4j&quot;, &quot;password&quot;)</span><br><span class="line"># 通过创建 Driver 对象并提供 URL 和身份验证令牌来连接到数据库</span><br><span class="line"># 获取 Driver 实例后，使用 .verify_connectivity() 方法确保可以建立有效的连接</span><br><span class="line"><span class="keyword">with</span> GraphDatabase.driver(URI, auth<span class="operator">=</span>AUTH) <span class="keyword">as</span> driver:</span><br><span class="line">    driver.verify_connectivity()</span><br><span class="line">    print(&quot;Connection established.&quot;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="执行Cypher语句"><a href="#执行Cypher语句" class="headerlink" title="执行Cypher语句"></a>执行Cypher语句</h3><p>execute_query()是Neo4j Python驱动提供的简洁高效的查询执行方法，适合大多数基础查询场景。</p>
+<p>方法签名（只包含常用参数，完整签名可参考<a target="_blank" rel="noopener" href="https://neo4j.com/docs/api/python-driver/current/api.html#neo4j.Driver.execute_query">官方文档</a>）如下：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">execute_query(</span><br><span class="line">    query: str,               # 要执行的Cypher查询语句</span><br><span class="line">    parameters_: dict <span class="operator">=</span> <span class="keyword">None</span>,  # 查询参数（可选）</span><br><span class="line">    database_: str <span class="operator">=</span> <span class="keyword">None</span>,    # 目标数据库（可选，默认为配置的默认数据库）</span><br><span class="line">    <span class="operator">*</span><span class="operator">*</span>kwargs                  # 其他配置选项</span><br><span class="line">) <span class="operator">-</span><span class="operator">&gt;</span> EagerResult</span><br></pre></td></tr></table></figure>
+
+<p>参数说明：</p>
+<table>
+<thead>
+<tr>
+<th><strong>参数名</strong></th>
+<th><strong>类型</strong></th>
+<th><strong>必选</strong></th>
+<th><strong>默认值</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>query</strong></td>
+<td>str</td>
+<td>是</td>
+<td>-</td>
+<td>要执行的Cypher查询语句</td>
+</tr>
+<tr>
+<td><strong>parameters_</strong></td>
+<td>dict</td>
+<td>否</td>
+<td>None</td>
+<td>用字典形式传入查询参数</td>
+</tr>
+<tr>
+<td><strong>database_</strong></td>
+<td>str</td>
+<td>否</td>
+<td>None</td>
+<td>指定目标数据库名称</td>
+</tr>
+<tr>
+<td>**<strong>kwargs</strong></td>
+<td>-</td>
+<td>否</td>
+<td>-</td>
+<td>用keyword参数形式传入查询参数</td>
+</tr>
+</tbody></table>
+<p>返回值：</p>
+<p>execute_query() 默认返回一个 EagerResult，是一个命名元组，包含以下组件：</p>
+<table>
+<thead>
+<tr>
+<th><strong>属性</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>records</strong></td>
+<td>包含查询结果的记录列表，每条记录是一个字典式对象</td>
+</tr>
+<tr>
+<td><strong>summary</strong></td>
+<td>执行摘要，包含命中数、耗时、是否更新等信息</td>
+</tr>
+<tr>
+<td><strong>keys</strong></td>
+<td>返回结果的字段名列表</td>
+</tr>
+</tbody></table>
+<p>具体案例如下：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> neo4j import GraphDatabase</span><br><span class="line"></span><br><span class="line"># 连接配置</span><br><span class="line">URI <span class="operator">=</span> &quot;neo4j://localhost:7687&quot;</span><br><span class="line">AUTH <span class="operator">=</span> (&quot;neo4j&quot;, &quot;Atguigu.123&quot;)</span><br><span class="line"></span><br><span class="line"># 执行查询</span><br><span class="line"><span class="keyword">with</span> GraphDatabase.driver(URI, auth<span class="operator">=</span>AUTH) <span class="keyword">as</span> driver:</span><br><span class="line">    # 查询某个导演在某个年份之后拍过的电影</span><br><span class="line">    records, summary, keys <span class="operator">=</span> driver.execute_query(</span><br><span class="line">        &quot;&quot;&quot;</span><br><span class="line">        MATCH (p:Person&#123;name:$name&#125;)-[r:DIRECTED]-&gt;(m:Movie)</span><br><span class="line">        WHERE m.year &gt; $year</span><br><span class="line">        RETURN p.name AS director,m.year AS year, m.title AS movie</span><br><span class="line">        &quot;&quot;&quot;,</span><br><span class="line">        parameters_<span class="operator">=</span>&#123;&quot;name&quot;: &quot;张艺谋&quot;, &quot;year&quot;: <span class="number">1990</span>&#125;,</span><br><span class="line">        database_<span class="operator">=</span>&quot;neo4j&quot;</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    # 处理结果</span><br><span class="line">    print(f&quot;查询返回了 &#123;len(records)&#125; 条记录&quot;)</span><br><span class="line">    <span class="keyword">for</span> record <span class="keyword">in</span> records:</span><br><span class="line">        print(f&quot;&#123;record[&#x27;director&#x27;]&#125;在&#123;record[&#x27;year&#x27;]&#125;年拍摄了《&#123;record[&#x27;movie&#x27;]&#125;》&quot;)</span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">小刘</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2026/05/18/Neo4j%E5%9B%BE%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0/">http://example.com/2026/05/18/Neo4j图数据库学习/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">欢迎来到小刘的博客</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/AI/">AI</a></div><div class="post-share"><div class="social-share" data-image="/img/avatar.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2026/05/18/LangChainV1-0%E5%AD%A6%E4%B9%A0/" title="LangChainV1.0学习"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">LangChainV1.0学习</div></div><div class="info-2"><div class="info-item-1">LangChain v1.0LangChain的核心组件LangChain的核心组件主要涉及四个部分：Model I&#x2F;O、Chains、RAG、Agents Model I&#x2F;O:标准化大模型的输入和输出，包含提示模版，模型调用和格式化输出。 Chains:“链条”用于将多个组件组合成一个完整的流程，方便链式调用。 Retrieval:对应RAG：检索外部数据，作为参考信息输入LLM辅助生成答案。 Agents:Agent 自主规划执行步骤并使用工具来完成任务。 Model I&#x2F;OModel I&#x2F;O 部分是与语言模型进行交互的核心组件，包括输入提示（Prompt Template）、调用模型（Model）、输出解析（Output Parser）。简单来说，就是输入、处理、输出这三个步骤。 OpenAI SDK调用模型1、传递prompt，调用client.chat.completions.create from openai import OpenAIclient = OpenAI(	base_url=&quot;&quot;,	api_ke...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/05/18/LangChainV1-0%E5%AD%A6%E4%B9%A0/" title="LangChainV1.0学习"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-18</div><div class="info-item-2">LangChainV1.0学习</div></div><div class="info-2"><div class="info-item-1">LangChain v1.0LangChain的核心组件LangChain的核心组件主要涉及四个部分：Model I&#x2F;O、Chains、RAG、Agents Model I&#x2F;O:标准化大模型的输入和输出，包含提示模版，模型调用和格式化输出。 Chains:“链条”用于将多个组件组合成一个完整的流程，方便链式调用。 Retrieval:对应RAG：检索外部数据，作为参考信息输入LLM辅助生成答案。 Agents:Agent 自主规划执行步骤并使用工具来完成任务。 Model I&#x2F;OModel I&#x2F;O 部分是与语言模型进行交互的核心组件，包括输入提示（Prompt Template）、调用模型（Model）、输出解析（Output Parser）。简单来说，就是输入、处理、输出这三个步骤。 OpenAI SDK调用模型1、传递prompt，调用client.chat.completions.create from openai import OpenAIclient = OpenAI(	base_url=&quot;&quot;,	api_ke...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/loading.gif" data-original="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">小刘</div><div class="author-info-description">既然选择了远方，便不顾风雨兼程</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">6</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Neo4j%E5%AD%A6%E4%B9%A0"><span class="toc-number">1.</span> <span class="toc-text">Neo4j学习</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-number">1.1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">1.2.</span> <span class="toc-text">安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E6%96%B9%E5%BC%8F%E6%A6%82%E8%A7%88"><span class="toc-number">1.2.1.</span> <span class="toc-text">安装方式概览</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85JDK"><span class="toc-number">1.2.2.</span> <span class="toc-text">安装JDK</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Neo4j"><span class="toc-number">1.2.3.</span> <span class="toc-text">安装Neo4j</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E5%AE%89%E8%A3%85%E5%8C%85"><span class="toc-number">1.2.3.1.</span> <span class="toc-text">获取安装包</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">1.2.3.2.</span> <span class="toc-text">配置环境变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Neo4j-service"><span class="toc-number">1.2.3.3.</span> <span class="toc-text">安装Neo4j service</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8Neo4j"><span class="toc-number">1.2.3.4.</span> <span class="toc-text">启动Neo4j</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%BF%E9%97%AEweb%E9%A1%B5%E9%9D%A2"><span class="toc-number">1.2.3.5.</span> <span class="toc-text">访问web页面</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cypher%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80"><span class="toc-number">1.3.</span> <span class="toc-text">Cypher语言基础</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%99%E5%85%A5%E8%8A%82%E7%82%B9"><span class="toc-number">1.3.1.</span> <span class="toc-text">写入节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2%E8%8A%82%E7%82%B9"><span class="toc-number">1.3.2.</span> <span class="toc-text">查询节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%99%E5%85%A5%E5%85%B3%E7%B3%BB"><span class="toc-number">1.3.3.</span> <span class="toc-text">写入关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2%E5%85%B3%E7%B3%BB"><span class="toc-number">1.3.4.</span> <span class="toc-text">查询关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%99%E5%85%A5%E8%B7%AF%E5%BE%84"><span class="toc-number">1.3.5.</span> <span class="toc-text">写入路径</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE"><span class="toc-number">1.3.6.</span> <span class="toc-text">修改数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE"><span class="toc-number">1.3.7.</span> <span class="toc-text">删除数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%88%E5%B9%B6%E6%93%8D%E4%BD%9C"><span class="toc-number">1.3.8.</span> <span class="toc-text">合并操作</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.4.</span> <span class="toc-text">数据类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.4.1.</span> <span class="toc-text">基本数据类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%8D%E5%90%88%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.4.2.</span> <span class="toc-text">复合数据类型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cypher%E5%87%BD%E6%95%B0"><span class="toc-number">1.5.</span> <span class="toc-text">Cypher函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%87%BD%E6%95%B0"><span class="toc-number">1.5.1.</span> <span class="toc-text">字符串函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E5%AD%A6%E5%87%BD%E6%95%B0"><span class="toc-number">1.5.2.</span> <span class="toc-text">数学函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9B%86%E5%90%88%E5%87%BD%E6%95%B0"><span class="toc-number">1.5.3.</span> <span class="toc-text">集合函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A5%E6%9C%9F%E6%97%B6%E9%97%B4%E5%87%BD%E6%95%B0"><span class="toc-number">1.5.4.</span> <span class="toc-text">日期时间函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cypher%E9%AB%98%E7%BA%A7%E6%9F%A5%E8%AF%A2"><span class="toc-number">1.6.</span> <span class="toc-text">Cypher高级查询</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%87%E6%BB%A4"><span class="toc-number">1.6.1.</span> <span class="toc-text">过滤</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%AF%94%E8%BE%83%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-number">1.6.1.1.</span> <span class="toc-text">基本比较运算符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%9A%E6%9D%A1%E4%BB%B6%E7%BB%84%E5%90%88"><span class="toc-number">1.6.1.2.</span> <span class="toc-text">多条件组合</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9B%86%E5%90%88%E5%8C%85%E5%90%AB"><span class="toc-number">1.6.1.3.</span> <span class="toc-text">集合包含</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D"><span class="toc-number">1.6.1.4.</span> <span class="toc-text">字符串匹配</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A9%BA%E5%80%BC%E5%88%A4%E6%96%AD"><span class="toc-number">1.6.1.5.</span> <span class="toc-text">空值判断</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%92%E5%BA%8F"><span class="toc-number">1.6.2.</span> <span class="toc-text">排序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E9%A1%B5"><span class="toc-number">1.6.3.</span> <span class="toc-text">分页</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-LIMIT-%E9%99%90%E5%88%B6%E8%BF%94%E5%9B%9E%E6%95%B0%E9%87%8F"><span class="toc-number">1.6.3.1.</span> <span class="toc-text">使用 LIMIT 限制返回数量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-SKIP-%E8%B7%B3%E8%BF%87%E6%8C%87%E5%AE%9A%E6%95%B0%E9%87%8F"><span class="toc-number">1.6.3.2.</span> <span class="toc-text">使用 SKIP 跳过指定数量</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%81%9A%E5%90%88"><span class="toc-number">1.6.4.</span> <span class="toc-text">聚合</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E5%80%BC%E7%B1%BB%E8%81%9A%E5%90%88"><span class="toc-number">1.6.4.1.</span> <span class="toc-text">数值类聚合</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%97%E8%A1%A8%E7%B1%BB%E8%81%9A%E5%90%88"><span class="toc-number">1.6.5.</span> <span class="toc-text">列表类聚合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%81%94%E5%90%88%E6%9F%A5%E8%AF%A2"><span class="toc-number">1.6.6.</span> <span class="toc-text">联合查询</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%90%E6%9F%A5%E8%AF%A2"><span class="toc-number">1.6.7.</span> <span class="toc-text">子查询</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%AB%98%E7%BA%A7%E6%A8%A1%E5%BC%8F%E5%8C%B9%E9%85%8D"><span class="toc-number">1.6.8.</span> <span class="toc-text">高级模式匹配</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8A%82%E7%82%B9%E6%A8%A1%E5%BC%8F%E5%8C%B9%E9%85%8D"><span class="toc-number">1.6.8.1.</span> <span class="toc-text">节点模式匹配</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%BC%8F%E5%8C%B9%E9%85%8D"><span class="toc-number">1.6.8.2.</span> <span class="toc-text">关系模式匹配</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%A0%E6%96%B9%E5%90%91%E5%85%B3%E7%B3%BB"><span class="toc-number">1.6.8.3.</span> <span class="toc-text">无方向关系</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B7%AF%E5%BE%84%E6%A8%A1%E5%BC%8F%E5%8C%B9%E9%85%8D"><span class="toc-number">1.6.8.4.</span> <span class="toc-text">路径模式匹配</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%A6%E6%9D%9F"><span class="toc-number">1.7.</span> <span class="toc-text">约束</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B1%9E%E6%80%A7%E5%94%AF%E4%B8%80%E7%BA%A6%E6%9D%9F"><span class="toc-number">1.7.1.</span> <span class="toc-text">属性唯一约束</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%AD%E6%B3%95"><span class="toc-number">1.7.2.</span> <span class="toc-text">语法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8A%82%E7%82%B9%E5%B1%9E%E6%80%A7"><span class="toc-number">1.7.2.1.</span> <span class="toc-text">节点属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B3%E7%B3%BB%E5%8D%95%E5%B1%9E%E6%80%A7"><span class="toc-number">1.7.2.2.</span> <span class="toc-text">关系单属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8A%82%E7%82%B9%E5%A4%8D%E5%90%88%E5%B1%9E%E6%80%A7"><span class="toc-number">1.7.2.3.</span> <span class="toc-text">节点复合属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B3%E7%B3%BB%E5%A4%8D%E5%90%88%E5%B1%9E%E6%80%A7"><span class="toc-number">1.7.2.4.</span> <span class="toc-text">关系复合属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E7%BA%A6%E6%9D%9F"><span class="toc-number">1.7.2.5.</span> <span class="toc-text">查看约束</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E7%BA%A6%E6%9D%9F"><span class="toc-number">1.7.2.6.</span> <span class="toc-text">删除约束</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B"><span class="toc-number">1.7.3.</span> <span class="toc-text">案例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8Python%E8%AE%BF%E9%97%AENeo4j"><span class="toc-number">1.8.</span> <span class="toc-text">使用Python访问Neo4j</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Neo4j%E9%A9%B1%E5%8A%A8"><span class="toc-number">1.8.1.</span> <span class="toc-text">安装Neo4j驱动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BADriver%E5%AF%B9%E8%B1%A1"><span class="toc-number">1.8.2.</span> <span class="toc-text">创建Driver对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8CCypher%E8%AF%AD%E5%8F%A5"><span class="toc-number">1.8.3.</span> <span class="toc-text">执行Cypher语句</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/18/Neo4j%E5%9B%BE%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%A6%E4%B9%A0/" title="Neo4j图数据库学习">Neo4j图数据库学习</a><time datetime="2026-05-18T06:04:48.000Z" title="发表于 2026-05-18 14:04:48">2026-05-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/18/LangChainV1-0%E5%AD%A6%E4%B9%A0/" title="LangChainV1.0学习">LangChainV1.0学习</a><time datetime="2026-05-18T02:50:31.000Z" title="发表于 2026-05-18 10:50:31">2026-05-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/18/Linux%E5%8F%8AShell%E5%AD%A6%E4%B9%A0/" title="Linux及Shell学习">Linux及Shell学习</a><time datetime="2026-05-18T02:45:57.000Z" title="发表于 2026-05-18 10:45:57">2026-05-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/18/python%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/" title="python基础学习">python基础学习</a><time datetime="2026-05-18T02:16:06.000Z" title="发表于 2026-05-18 10:16:06">2026-05-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/17/tailwindcss%E5%AD%A6%E4%B9%A0/" title="tailwindcss学习">tailwindcss学习</a><time datetime="2026-05-17T15:26:21.000Z" title="发表于 2026-05-17 23:26:21">2026-05-17</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url(/img/banner.jpeg);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By 小刘</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.2</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4"></script><script src="/js/main.js?v=5.5.4"></script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div>
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z\d\-\.\+]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(t.test(e.href)||r.test(e.href))&&(e.href=a.dataset.original)})});</script><script>(r=>{r.imageLazyLoadSetting.processImages=t;var a=r.imageLazyLoadSetting.isSPA,o=r.imageLazyLoadSetting.preloadRatio||1,d=i();function i(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(t){(a||t)&&(d=i());for(var e,n=0;n<d.length;n++)0<=(e=(e=d[n]).getBoundingClientRect()).bottom&&0<=e.left&&e.top<=(r.innerHeight*o||document.documentElement.clientHeight*o)&&(()=>{var t,e,a,o,i=d[n];e=function(){d=d.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).dataset.loaded||(t.hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(a=new Image,o=t.getAttribute("data-original"),a.onload=function(){t.src=o,t.removeAttribute("data-original"),t.setAttribute("data-loaded",!0),e&&e()},a.onerror=function(){t.removeAttribute("data-original"),t.setAttribute("data-loaded",!1),t.src=o},t.src!==o&&(a.src=o)))})()}function e(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",e),r.addEventListener("resize",e),r.addEventListener("orientationchange",e)})(this);</script></body></html>
